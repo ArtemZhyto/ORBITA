@@ -7,14 +7,14 @@ export const siteConfig = {
   	default: "ORBITA",
   	template: "%s | ORBITA"
 	},
-  description: "Orbital Radio-coverage Behavior & Interaction Analysis",
+  description: "Next-generation orbital radio-coverage analysis. Visualize, interact, and optimize satellite communication patterns with high precision",
   metadataBase: new URL(baseUrl),
 	other: {
     "msapplication-config": "/browserconfig.xml",
   },
   openGraph: {
     title: "ORBITA",
-    description: "Orbital Radio-coverage Behavior & Interaction Analysis",
+    description: "Next-generation orbital radio-coverage analysis. Visualize, interact, and optimize satellite communication patterns with high precision",
 		images: [
       {
         url: "/images/web-app-manifest-512x512.png",
@@ -30,7 +30,7 @@ export const siteConfig = {
   },
   twitter: {
     title: "ORBITA",
-    description: "Orbital Radio-coverage Behavior & Interaction Analysis",
+    description: "Next-generation orbital radio-coverage analysis. Visualize, interact, and optimize satellite communication patterns with high precision",
 		card: "summary_large_image",
     images: ["/images/web-app-manifest-512x512.png"],
 		site: "ORBITA",

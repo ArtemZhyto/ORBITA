@@ -5,7 +5,7 @@ export const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   'name': 'ORBITA',
-  'description': 'Orbital Radio-coverage Behavior & Interaction Analysis',
+  'description': 'Next-generation orbital radio-coverage analysis. Visualize, interact, and optimize satellite communication patterns with high precision',
   'url': siteConfig.metadataBase.toString(),
 	'logo': {
 		'@type': 'ImageObject',
