@@ -1,93 +1,103 @@
 //@ Modules
 import * as THREE from "three"
-import Stats from "three/examples/jsm/libs/stats.module"
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer"
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass"
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass"
+import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass"
+import Stats from "stats.js"
 
-//@ System
-import { initSceneLoader } from "./scene-loader"
-import { createCamera } from "./camera"
+//@ Helpers
+import { loadTexture } from "./helpers/loader"
+import { setupCamera } from "./helpers/camera"
+import { setupControls } from "./helpers/controls"
+import { setupLensflare } from "./helpers/lensflare"
+import { animateScene } from "./helpers/animate"
 
-//@ Components
-import { createStars } from "./stars"
-import Sun from "./sun"
-import Earth from "./earth"
+//@ Objects
+import { createEarth } from "./objects/earth"
+import { createMoon } from "./objects/moon"
+import { createSun } from "./objects/sun"
 
-const LOG_STYLE = 'color: #ffffff; font-weight: bold; background: #444; padding: 2px 5px; border-radius: 3px;'
+//@ Textures
+import { createGlowTexture } from "./textures/glowTexture"
+import { createGhostTexture } from "./textures/ghostTexture"
 
-const Scene = (container: HTMLElement, loaderElement: HTMLElement, progressBar: HTMLElement, percentElement: HTMLElement) => {
-  console.log('%c[System] Initializing Engine...', LOG_STYLE)
+//@ Constants
+import { initialState } from "./constants/initialStates"
 
-  //C: Setup loading management and performance monitoring
-  const manager = new THREE.LoadingManager()
-  let stats: Stats | null = null
-
-  //C: Core Three.js setup
+export const Scene = (container: HTMLDivElement) => {
+  const { width, height } = container.getBoundingClientRect()
   const scene = new THREE.Scene()
-  const w = container.clientWidth
-  const h = container.clientHeight
 
   const renderer = new THREE.WebGLRenderer({ antialias: true })
-  renderer.setSize(w, h)
+  renderer.setSize(width, height)
+  renderer.setPixelRatio(window.devicePixelRatio)
+  renderer.shadowMap.enabled = true
+  renderer.shadowMap.type = THREE.VSMShadowMap
   container.appendChild(renderer.domElement)
 
-  //C: Initialize asset loading process
-	initSceneLoader(manager, loaderElement, percentElement, () => {
-		stats = new Stats()
-		container.appendChild(stats.dom)
-		console.log('%c[System] Resources loaded.', LOG_STYLE)
-	})
+  const starsTexture = loadTexture("/images/textures/High/8k_stars_milky_way.jpg", THREE.EquirectangularReflectionMapping)
+  const dayTex = loadTexture("/images/textures/High/8k_earth_daymap.jpg")
+  const nightTex = loadTexture("/images/textures/High/8k_earth_nightmap.jpg")
+  const normalTex = loadTexture("/images/textures/High/8k_earth_normal_map.jpg")
+  const specTex = loadTexture("/images/textures/High/8k_earth_specular_map.jpg")
+  const cloudsTex = loadTexture("/images/textures/High/8k_earth_clouds.jpg")
+  const moonTex = loadTexture("/images/textures/Medium/2k_moon.jpg")
+  const sunTex = loadTexture("/images/textures/Medium/2k_sun.jpg")
 
-  //C: Create and add celestial bodies to the scene
-  const stars = createStars(manager)
-  const sun = Sun(manager)
-  const earth = Earth(manager)
-  scene.add(stars, sun, earth)
+  ;[dayTex, nightTex, moonTex, sunTex].forEach(t => t.colorSpace = THREE.SRGBColorSpace)
 
-  //C: Camera and positioning logic
-  const { camera, updateCamera, initPosition } = createCamera(w, h, renderer.domElement)
-  const oldPosition = new THREE.Vector3().copy(earth.position)
+  scene.background = starsTexture
 
-  //C: Set starting focus point
-  initPosition(earth.position)
+  const { sunMesh, sunLight } = createSun()
+  scene.add(sunMesh, sunLight)
+  scene.add(sunLight.target)
 
-  const animate = () => {
-    requestAnimationFrame(animate)
-    if (stats) stats.begin()
+  const coreTex = createGlowTexture()
+  const ghostTex = createGhostTexture()
+  setupLensflare(sunLight, coreTex, ghostTex)
 
-    //C: Capture previous state for smooth tracking
-    oldPosition.copy(earth.position)
+  scene.add(new THREE.AmbientLight(0xffffff, 0.05))
 
-    //C: Update logic for each celestial entity
-    earth.userData.update()
-    if (sun.userData.update) sun.userData.update()
-    earth.userData.updateSunPosition(sun.position)
+  const { earthPivot, earthGroup, earthMesh, cloudsMesh, earthMaterial, cloudsMaterial} =
+    createEarth(dayTex, nightTex, normalTex, specTex, cloudsTex, initialState.earthRotationY)
 
-    //C: Sync camera with moving targets
-    updateCamera(earth.position, oldPosition)
+  scene.add(earthPivot)
 
-    renderer.render(scene, camera)
-    if (stats) stats.end()
-  }
+  const { moonPivot, moonMesh } = createMoon(moonTex)
+  scene.add(moonPivot)
 
-  animate()
-  console.log('%c[System] Animation loop started.', 'color: #888; font-style: italic;')
+  const { camera, worldEarthPos } = setupCamera(initialState, earthGroup, width, height)
+  const controls = setupControls(camera, worldEarthPos, renderer.domElement)
+
+  const composer = new EffectComposer(renderer)
+  composer.addPass(new RenderPass(scene, camera))
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(width, height), 0.2, 0.4, 0.85))
+  composer.addPass(new OutputPass())
+
+	const stats = new Stats()
+  stats.showPanel(0)
+  stats.dom.style.position = 'absolute'
+  stats.dom.style.top = '0px'
+  stats.dom.style.left = '0px'
+  container.appendChild(stats.dom)
+
+  animateScene({ scene, earthPivot, earthMesh, cloudsMesh, earthMaterial, cloudsMaterial, moonPivot, moonMesh, sunMesh, sunLight, camera, controls, composer, stats })
 
   const handleResize = () => {
-    const newW = container.clientWidth
-    const newH = container.clientHeight
-    renderer.setSize(newW, newH)
-    camera.aspect = newW / newH
+    const { width: w, height: h } = container.getBoundingClientRect()
+    camera.aspect = w / h
     camera.updateProjectionMatrix()
-    console.log('%c[System] Viewport resized', 'color: #666; font-size: 10px;')
+    renderer.setSize(w, h)
+    composer.setSize(w, h)
   }
 
-  window.addEventListener('resize', handleResize)
+  window.addEventListener("resize", handleResize)
 
   return () => {
-    //C: Cleanup scene and event listeners on destroy
-    console.log('%c[System] Disposing Scene...', 'color: #ff4444; font-weight: bold;')
+    window.removeEventListener("resize", handleResize)
     renderer.dispose()
-    window.removeEventListener('resize', handleResize)
-    if (stats) stats.dom.remove()
+    if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement)
   }
 }
 

@@ -12,20 +12,19 @@ const View = () => {
   const loaderRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!containerRef.current || !loaderRef.current) return
+    if (!containerRef.current) return
 
-    const progressLine = document.getElementById('progress-line') as HTMLElement
-    const percentText = document.getElementById('percent-text') as HTMLElement
+    const destroy = Scene(containerRef.current)
 
-    const destroy = Scene(containerRef.current, loaderRef.current, progressLine, percentText)
-
-    return () => destroy()
+    return () => {
+      if (destroy) destroy()
+    }
   }, [])
 
   return (
     <>
-      <LoadingBar ref={loaderRef}/>
-      <div ref={containerRef} className="w-full h-screen bg-black"/>
+      {/* <LoadingBar ref={loaderRef}/> */}
+      <div ref={containerRef} className="w-full h-screen bg-black overflow-hidden"/>
     </>
   )
 }
