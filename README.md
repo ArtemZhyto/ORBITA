@@ -5,9 +5,6 @@
 
 <div align="center">
   <img src="./preview.png" alt="ORBITA Engine Preview" width="100%">
-  <p align="center">
-    <strong>ORBITA Engine:</strong> Visualizing real-time day/night transitions and atmospheric scattering.
-  </p>
 </div>
 
 ORBITA is an analytical system designed for modeling satellite constellation behaviors and visualizing radio-coverage interaction. The project bridges the gap between complex orbital mechanics and high-performance web-based simulation.
