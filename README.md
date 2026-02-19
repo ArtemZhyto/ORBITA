@@ -4,9 +4,9 @@
 > **Tech Stack:** Next.js, TypeScript, Three.js (WebGL), GLSL
 
 <div align="center">
-  <video src="https://github.com/ArtemZhyto/ORBITA/raw/master/preview.mp4" width="100%" autoplay loop muted playsinline></video>
+  <img src="./preview.png" alt="ORBITA Engine Preview" width="100%">
   <p align="center">
-    <strong>ORBITA Engine:</strong> Real-time day/night transition and atmospheric scattering simulation.
+    <strong>ORBITA Engine:</strong> Visualizing real-time day/night transitions and atmospheric scattering.
   </p>
 </div>
 
