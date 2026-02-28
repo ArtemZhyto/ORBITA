@@ -1,7 +1,10 @@
 //@ Modules
 import * as THREE from "three"
 
-export const setupCamera = (initialState: any, earthGroup: THREE.Group, width: number, height: number) => {
+//@ Constants
+import { initialState } from "../constants/initialStates"
+
+export const setupCamera = (earthGroup: THREE.Group, width: number, height: number) => {
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 15000)
 
   const worldEarthPos = new THREE.Vector3()

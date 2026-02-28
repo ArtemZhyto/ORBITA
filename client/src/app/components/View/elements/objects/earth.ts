@@ -5,23 +5,25 @@ import * as THREE from "three"
 import { createEarthMaterial } from "../materials/earthMaterial"
 import { createCloudsMaterial } from "../materials/cloudsMaterial"
 
+//@ Constants
+import { initialDistances } from "../constants/distances"
+import { initialState } from "../constants/initialStates"
+
 export const createEarth = (
   dayTex: THREE.Texture,
   nightTex: THREE.Texture,
   normalTex: THREE.Texture,
   specTex: THREE.Texture,
-  cloudsTex: THREE.Texture,
-  initialRotationY: number,
-  pivotPositionX = 3840
+  cloudsTex: THREE.Texture
 ) => {
   const earthPivot = new THREE.Object3D()
   const earthGroup = new THREE.Group()
-  earthGroup.position.x = pivotPositionX
+  earthGroup.position.x = initialDistances.earthFromSunX
   earthPivot.add(earthGroup)
 
   const earthMaterial = createEarthMaterial(dayTex, nightTex, normalTex, specTex)
   const earthMesh = new THREE.Mesh(new THREE.SphereGeometry(10, 64, 64), earthMaterial)
-  earthMesh.rotation.y = initialRotationY
+  earthMesh.rotation.y = initialState.earthRotationY
   earthMesh.castShadow = true
   earthMesh.receiveShadow = true
   earthGroup.add(earthMesh)
@@ -36,7 +38,7 @@ export const createEarth = (
   const ozoneMaterial = new THREE.MeshPhongMaterial({
     color: 0x00aaff,
     transparent: true,
-    opacity: 0.05,
+    opacity: 0.0075,
     side: THREE.BackSide,
     blending: THREE.AdditiveBlending,
   })

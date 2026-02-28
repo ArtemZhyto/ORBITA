@@ -7,11 +7,12 @@ import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass"
 import Stats from "stats.js"
 
 //@ Helpers
-import { loadTexture } from "./helpers/loader"
+import { startProgressiveLoading } from "./helpers/loader"
 import { setupCamera } from "./helpers/camera"
 import { setupControls } from "./helpers/controls"
 import { setupLensflare } from "./helpers/lensflare"
 import { animateScene } from "./helpers/animate"
+import * as Textures from "./helpers/textures"
 
 //@ Objects
 import { createEarth } from "./objects/earth"
@@ -22,12 +23,14 @@ import { createSun } from "./objects/sun"
 import { createGlowTexture } from "./textures/glowTexture"
 import { createGhostTexture } from "./textures/ghostTexture"
 
-//@ Constants
-import { initialState } from "./constants/initialStates"
-
-export const Scene = (container: HTMLDivElement) => {
+export const Scene = (
+	container: HTMLDivElement,
+	onProgress: (p: number) => void,
+  onLoaded: () => void
+) => {
   const { width, height } = container.getBoundingClientRect()
   const scene = new THREE.Scene()
+	scene.background = Textures.starsTexture
 
   const renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setSize(width, height)
@@ -36,22 +39,8 @@ export const Scene = (container: HTMLDivElement) => {
   renderer.shadowMap.type = THREE.VSMShadowMap
   container.appendChild(renderer.domElement)
 
-  const starsTexture = loadTexture("/images/textures/High/8k_stars_milky_way.jpg", THREE.EquirectangularReflectionMapping)
-  const dayTex = loadTexture("/images/textures/High/8k_earth_daymap.jpg")
-  const nightTex = loadTexture("/images/textures/High/8k_earth_nightmap.jpg")
-  const normalTex = loadTexture("/images/textures/High/8k_earth_normal_map.jpg")
-  const specTex = loadTexture("/images/textures/High/8k_earth_specular_map.jpg")
-  const cloudsTex = loadTexture("/images/textures/High/8k_earth_clouds.jpg")
-  const moonTex = loadTexture("/images/textures/Medium/2k_moon.jpg")
-  const sunTex = loadTexture("/images/textures/Medium/2k_sun.jpg")
-
-  ;[dayTex, nightTex, moonTex, sunTex].forEach(t => t.colorSpace = THREE.SRGBColorSpace)
-
-  scene.background = starsTexture
-
-  const { sunMesh, sunLight } = createSun()
+	const { sunMesh, sunLight } = createSun()
   scene.add(sunMesh, sunLight)
-  scene.add(sunLight.target)
 
   const coreTex = createGlowTexture()
   const ghostTex = createGhostTexture()
@@ -60,14 +49,14 @@ export const Scene = (container: HTMLDivElement) => {
   scene.add(new THREE.AmbientLight(0xffffff, 0.05))
 
   const { earthPivot, earthGroup, earthMesh, cloudsMesh, earthMaterial, cloudsMaterial} =
-    createEarth(dayTex, nightTex, normalTex, specTex, cloudsTex, initialState.earthRotationY)
+    createEarth(Textures.dayTex, Textures.nightTex, Textures.normalTex, Textures.specTex, Textures.cloudsTex)
 
   scene.add(earthPivot)
 
-  const { moonPivot, moonMesh } = createMoon(moonTex)
+  const { moonPivot, moonMesh } = createMoon(Textures.moonTex)
   scene.add(moonPivot)
 
-  const { camera, worldEarthPos } = setupCamera(initialState, earthGroup, width, height)
+  const { camera, worldEarthPos } = setupCamera(earthGroup, width, height)
   const controls = setupControls(camera, worldEarthPos, renderer.domElement)
 
   const composer = new EffectComposer(renderer)
@@ -76,13 +65,12 @@ export const Scene = (container: HTMLDivElement) => {
   composer.addPass(new OutputPass())
 
 	const stats = new Stats()
-  stats.showPanel(0)
-  stats.dom.style.position = 'absolute'
-  stats.dom.style.top = '0px'
-  stats.dom.style.left = '0px'
+	stats.dom.style.zIndex = '0'
   container.appendChild(stats.dom)
 
   animateScene({ scene, earthPivot, earthMesh, cloudsMesh, earthMaterial, cloudsMaterial, moonPivot, moonMesh, sunMesh, sunLight, camera, controls, composer, stats })
+
+	startProgressiveLoading(onProgress, onLoaded)
 
   const handleResize = () => {
     const { width: w, height: h } = container.getBoundingClientRect()

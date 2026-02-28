@@ -1,5 +1,3 @@
-@use "./variables.scss" as vars;
-
 html, body {
 	width: 100%;
 	height: 100%;
@@ -23,5 +21,5 @@ h1, h2, h3, h4, h5, h6, a, button, p,
 strong, legend, label, input, ul, li, div {
   font-variant-ligatures: none;
   word-wrap: break-word;
-	color: vars.$wh;
+	color: #F8F8F8;
 }

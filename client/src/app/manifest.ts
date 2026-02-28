@@ -1,5 +1,8 @@
+//@ Modules
 import { MetadataRoute } from 'next'
-import { siteConfig } from '@/config/metadata'
+
+//@ Config
+import { siteConfig } from '@config/metadata'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {

@@ -1,6 +1,6 @@
 # ORBITA (Orbital Radio-coverage Behavior & Interaction Analysis) 🛰️
 
-> **Status:** Active Development / Architectural Modeling Phase  
+> **Status:** Active Development / Architectural Modeling Phase
 > **Tech Stack:** Next.js, TypeScript, Three.js (WebGL), GLSL
 
 <div align="center">

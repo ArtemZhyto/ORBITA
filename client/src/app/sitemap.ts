@@ -1,5 +1,7 @@
 //@ Modules
 import { MetadataRoute } from 'next'
+
+//@ Config
 import { siteConfig } from '@config/metadata'
 
 export default function sitemap(): MetadataRoute.Sitemap {

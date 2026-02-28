@@ -1,6 +1,6 @@
 const baseUrl = process.env.MODE === 'prod'
   ? `https://${process.env.SITE}`
-  : 'http://localhost:3000'
+  : 'http://localhost:3030'
 
 export const siteConfig = {
 	title: {
