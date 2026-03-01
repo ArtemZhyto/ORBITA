@@ -9,6 +9,9 @@ export const siteConfig = {
 	},
   description: "Next-generation orbital radio-coverage analysis. Visualize, interact, and optimize satellite communication patterns with high precision",
   metadataBase: new URL(baseUrl),
+	verification: {
+    google: "-bFKUp9UZ0jYkL5-883QEea9xS55DmtTErC-3HBog_g",
+  },
 	other: {
     "msapplication-config": "/browserconfig.xml",
   },
