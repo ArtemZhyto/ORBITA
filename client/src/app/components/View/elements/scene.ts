@@ -23,23 +23,27 @@ import { createSun } from "./objects/sun"
 import { createGlowTexture } from "./textures/glowTexture"
 import { createGhostTexture } from "./textures/ghostTexture"
 
-export const Scene = (
-	container: HTMLDivElement,
-	onProgress: (p: number) => void,
+const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0))
+
+export const Scene = async (
+  container: HTMLDivElement,
+  onProgress: (p: number) => void,
   onLoaded: () => void
 ) => {
   const { width, height } = container.getBoundingClientRect()
   const scene = new THREE.Scene()
-	scene.background = Textures.starsTexture
+  scene.background = Textures.starsTexture
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true })
+  const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" })
   renderer.setSize(width, height)
-  renderer.setPixelRatio(window.devicePixelRatio)
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = THREE.VSMShadowMap
   container.appendChild(renderer.domElement)
 
-	const { sunMesh, sunLight } = createSun()
+  await yieldToMain()
+
+  const { sunMesh, sunLight } = createSun()
   scene.add(sunMesh, sunLight)
 
   const coreTex = createGlowTexture()
@@ -48,10 +52,13 @@ export const Scene = (
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.05))
 
-  const { earthPivot, earthGroup, earthMesh, cloudsMesh, earthMaterial, cloudsMaterial} =
-    createEarth(Textures.dayTex, Textures.nightTex, Textures.normalTex, Textures.specTex, Textures.cloudsTex)
+  await yieldToMain()
 
+  const { earthPivot, earthGroup, earthMesh, cloudsMesh, earthMaterial, cloudsMaterial } =
+    createEarth(Textures.dayTex, Textures.nightTex, Textures.normalTex, Textures.specTex, Textures.cloudsTex)
   scene.add(earthPivot)
+
+  await yieldToMain()
 
   const { moonPivot, moonMesh } = createMoon(Textures.moonTex)
   scene.add(moonPivot)
@@ -61,16 +68,24 @@ export const Scene = (
 
   const composer = new EffectComposer(renderer)
   composer.addPass(new RenderPass(scene, camera))
-  composer.addPass(new UnrealBloomPass(new THREE.Vector2(width, height), 0.2, 0.4, 0.85))
+
+  const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.2, 0.4, 0.85)
+  composer.addPass(bloomPass)
   composer.addPass(new OutputPass())
 
-	const stats = new Stats()
-	stats.dom.style.zIndex = '0'
+  await renderer.compileAsync(scene, camera)
+
+  const stats = new Stats()
+  stats.dom.style.zIndex = '0'
   container.appendChild(stats.dom)
 
-  animateScene({ scene, earthPivot, earthMesh, cloudsMesh, earthMaterial, cloudsMaterial, moonPivot, moonMesh, sunMesh, sunLight, camera, controls, composer, stats })
+  const cleanupAnimate = animateScene({
+    scene, earthPivot, earthMesh, cloudsMesh, earthMaterial,
+    cloudsMaterial, moonPivot, moonMesh, sunMesh, sunLight,
+    camera, controls, composer, stats
+  })
 
-	startProgressiveLoading(onProgress, onLoaded)
+  startProgressiveLoading(onProgress, onLoaded)
 
   const handleResize = () => {
     const { width: w, height: h } = container.getBoundingClientRect()
@@ -84,7 +99,11 @@ export const Scene = (
 
   return () => {
     window.removeEventListener("resize", handleResize)
+    cleanupAnimate()
     renderer.dispose()
+    earthMaterial.dispose()
+    cloudsMaterial.dispose()
+
     if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement)
   }
 }

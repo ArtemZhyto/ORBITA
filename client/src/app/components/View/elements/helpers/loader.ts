@@ -14,21 +14,17 @@ interface TextureManifest {
 const textureRegistry: { tex: THREE.Texture; manifest: TextureManifest }[] = []
 const loader = new THREE.TextureLoader()
 
+const isMobile = typeof window !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+const pauseTime = isMobile ? 100 : 50
+
 export const loadTexture = (manifest: TextureManifest): THREE.Texture => {
-  let texture: THREE.Texture
-  if (typeof window !== "undefined") {
-    const canvas = document.createElement("canvas")
-    canvas.width = 1
-    canvas.height = 1
-    texture = new THREE.CanvasTexture(canvas)
-  } else {
-    texture = new THREE.Texture()
-  }
+  const texture = new THREE.Texture()
 
   if (manifest.mapping) texture.mapping = manifest.mapping
   if (manifest.colorSpace) texture.colorSpace = manifest.colorSpace
 
   textureRegistry.push({ tex: texture, manifest })
+
   return texture
 }
 
@@ -36,52 +32,66 @@ export const startProgressiveLoading = async (
   onProgress: (percent: number) => void,
   onFirstTierLoaded: () => void
 ) => {
-  const tiers: Tier[] = ["low", "medium", "high"]
-  let totalTexturesToLoad = 0
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
-  textureRegistry.forEach(reg => {
-    if (reg.manifest.low || reg.manifest.medium) totalTexturesToLoad++
-  })
+  const trackedTextures = textureRegistry.filter(reg => reg.manifest.low)
+  let loadedCount = 0
 
-  let loadedInFirstTier = 0
+  for (const reg of trackedTextures) {
+    await loadTierSpecific(reg, "low")
 
-  for (const tier of tiers) {
-    await loadTier(tier, (isFirstTier) => {
-      if (tier === "low" || (tier === "medium" && !textureRegistry[0].manifest.low)) {
-        loadedInFirstTier++
-        const percent = Math.round((loadedInFirstTier / totalTexturesToLoad) * 100)
-        onProgress(percent)
-      }
-    })
+    loadedCount++
 
-    if (tier === "low") {
-      onFirstTierLoaded()
+    const percent = Math.min(Math.floor((loadedCount / trackedTextures.length) * 100), 100)
+
+    onProgress(percent)
+
+    await new Promise(r => setTimeout(r, pauseTime))
+  }
+
+  onFirstTierLoaded()
+
+  await new Promise(r => setTimeout(r, 500))
+
+  for (const reg of textureRegistry) {
+    if (reg.manifest.medium) {
+      await loadTierSpecific(reg, "medium")
+      await new Promise(r => setTimeout(r, 100))
     }
+  }
+
+  if (!isMobile) {
+    setTimeout(async () => {
+      for (const reg of textureRegistry) {
+        if (reg.manifest.high) {
+          await loadTierSpecific(reg, "high")
+          await new Promise(r => setTimeout(r, 300))
+        }
+      }
+    }, 4000)
   }
 }
 
-async function loadTier(tier: Tier, onItemLoaded?: (isFirst: boolean) => void) {
-  const promises = textureRegistry.map(({ tex, manifest }) => {
-    const url = manifest[tier]
-    if (!url) {
-      if (tier === "low") onItemLoaded?.(true)
-      return Promise.resolve()
-    }
+async function loadTierSpecific(reg: any, tier: Tier) {
+  const url = reg.manifest[tier]
+  if (!url) return Promise.resolve()
 
-    return new Promise<void>((resolve) => {
-      loader.load(url, (loadedImage) => {
-        tex.image = loadedImage.image
-        tex.dispose()
-        tex.needsUpdate = true
-        if (manifest.colorSpace) tex.colorSpace = manifest.colorSpace
-        onItemLoaded?.(tier === "low")
-        resolve()
-      }, undefined, () => {
-        onItemLoaded?.(tier === "low")
-        resolve()
-      })
-    })
+  return new Promise<void>((resolve) => {
+    loader.load(url, async (loadedImage) => {
+      if ('decode' in loadedImage.image) {
+        try {
+          await loadedImage.image.decode()
+        } catch (e) {
+          console.error("Decode failed", e)
+        }
+      }
+
+      reg.tex.dispose()
+      reg.tex.image = loadedImage.image
+      reg.tex.needsUpdate = true
+
+      if (reg.manifest.colorSpace) reg.tex.colorSpace = reg.manifest.colorSpace
+      resolve()
+    }, undefined, () => resolve())
   })
-
-  return Promise.all(promises)
 }

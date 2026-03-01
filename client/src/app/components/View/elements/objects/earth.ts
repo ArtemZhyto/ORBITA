@@ -34,7 +34,7 @@ export const createEarth = (
   cloudsMesh.receiveShadow = true
   earthGroup.add(cloudsMesh)
 
-	const ozoneGeometry = new THREE.SphereGeometry(10.1, 64, 64)
+	const ozoneGeometry = new THREE.SphereGeometry(10.075, 64, 64)
   const ozoneMaterial = new THREE.MeshPhongMaterial({
     color: 0x00aaff,
     transparent: true,

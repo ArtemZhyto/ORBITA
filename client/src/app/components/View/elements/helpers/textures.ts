@@ -5,42 +5,42 @@ import * as THREE from "three"
 import { loadTexture } from "../helpers/loader"
 
 export const starsTexture = loadTexture({
-  low: "/images/textures/Low/1k_stars_milky_way.jpg",
-  medium: "/images/textures/Medium/2k_stars_milky_way.jpg",
-  high: "/images/textures/High/8k_stars_milky_way.jpg",
+  low: "/images/textures/Low/1k_stars_milky_way.webp",
+  medium: "/images/textures/Medium/2k_stars_milky_way.webp",
+  high: "/images/textures/High/8k_stars_milky_way.webp",
   mapping: THREE.EquirectangularReflectionMapping
 })
 
 export const dayTex = loadTexture({
-  low: "/images/textures/Low/1k_earth_daymap.jpg",
-  medium: "/images/textures/Medium/2k_earth_daymap.jpg",
-  high: "/images/textures/High/8k_earth_daymap.jpg",
+  low: "/images/textures/Low/1k_earth_daymap.webp",
+  medium: "/images/textures/Medium/2k_earth_daymap.webp",
+  high: "/images/textures/High/8k_earth_daymap.webp",
   colorSpace: THREE.SRGBColorSpace
 })
 
 export const nightTex = loadTexture({
-  low: "/images/textures/Low/1k_earth_nightmap.jpg",
-  medium: "/images/textures/Medium/2k_earth_nightmap.jpg",
-  high: "/images/textures/High/8k_earth_nightmap.jpg",
+  low: "/images/textures/Low/1k_earth_nightmap.webp",
+  medium: "/images/textures/Medium/2k_earth_nightmap.webp",
+  high: "/images/textures/High/8k_earth_nightmap.webp",
   colorSpace: THREE.SRGBColorSpace
 })
 
 export const normalTex = loadTexture({
-  medium: "/images/textures/Medium/2k_earth_normal_map.jpg",
-  high: "/images/textures/High/8k_earth_normal_map.jpg"
+  medium: "/images/textures/Medium/2k_earth_normal_map.webp",
+  high: "/images/textures/High/8k_earth_normal_map.webp"
 })
 
 export const specTex = loadTexture({
-  medium: "/images/textures/Medium/2k_earth_specular_map.jpg",
-  high: "/images/textures/High/8k_earth_specular_map.jpg"
+  medium: "/images/textures/Medium/2k_earth_specular_map.webp",
+  high: "/images/textures/High/8k_earth_specular_map.webp"
 })
 
 export const cloudsTex = loadTexture({
-  medium: "/images/textures/Medium/2k_earth_clouds.jpg",
-  high: "/images/textures/High/8k_earth_clouds.jpg"
+  medium: "/images/textures/Medium/2k_earth_clouds.webp",
+  high: "/images/textures/High/8k_earth_clouds.webp"
 })
 
 export const moonTex = loadTexture({
-  low: "/images/textures/Low/1k_moon.jpg",
+  low: "/images/textures/Low/1k_moon.webp",
   colorSpace: THREE.SRGBColorSpace
 })

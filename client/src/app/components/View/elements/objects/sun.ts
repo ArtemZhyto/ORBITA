@@ -7,7 +7,7 @@ import { createGhostTexture } from "../textures/ghostTexture"
 
 export const createSun = () => {
   const sunMesh = new THREE.Mesh(
-    new THREE.SphereGeometry(15, 64, 64),
+    new THREE.SphereGeometry(15, 2, 2),
     new THREE.MeshBasicMaterial({ color: 0xffffff })
   )
 

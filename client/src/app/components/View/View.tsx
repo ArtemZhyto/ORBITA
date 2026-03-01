@@ -16,34 +16,71 @@ const View = () => {
   useEffect(() => {
     if (!containerRef.current) return
 
-    const onProgress = (percent: number) => {
-      if (percentRef.current) {
-        percentRef.current.innerText = percent.toString()
+    let isMounted = true
+    let destroyFn: (() => void) | undefined
+    let targetPercent = 0
+    let currentPercent = 0
+    let rafId: number
+
+    const updateSmoothProgress = () => {
+      if (currentPercent < targetPercent) {
+        currentPercent += 1.5
+
+        if (percentRef.current) percentRef.current.innerText = Math.floor(currentPercent).toString()
       }
+
+      rafId = requestAnimationFrame(updateSmoothProgress)
     }
+
+    updateSmoothProgress()
+
+    const onProgress = (percent: number) => targetPercent = percent
 
     const onLoaded = () => {
-      if (loaderRef.current) {
-        loaderRef.current.style.opacity = '0'
-        setTimeout(() => {
-          setIsReady(true)
-        }, 500)
-      }
+      targetPercent = 100
+
+      const checkInterval = setInterval(() => {
+        if (currentPercent >= 99) {
+          clearInterval(checkInterval)
+
+          setTimeout(() => {
+            if (loaderRef.current) {
+              loaderRef.current.style.opacity = '0'
+
+              setTimeout(() => { if (isMounted) setIsReady(true) }, 500)
+            }
+          }, 500)
+        }
+      }, 50)
     }
 
-    const destroy = Scene(containerRef.current, onProgress, onLoaded)
+    const init = async () => {
+      await new Promise(resolve => setTimeout(resolve, 300))
+
+      if (!isMounted) return
+
+      const cleanup = await Scene(containerRef.current!, onProgress, onLoaded)
+
+      if (!isMounted) cleanup()
+      else destroyFn = cleanup
+    }
+
+    init()
 
     return () => {
-      if (destroy) destroy()
+      isMounted = false
+      cancelAnimationFrame(rafId)
+
+      if (destroyFn) destroyFn()
     }
   }, [])
 
   return (
     <>
       {!isReady && <LoadingScreen ref={loaderRef}
-																	percentRef={percentRef} />}
+																	percentRef={percentRef}/>}
       <div ref={containerRef}
-					 className="w-full h-screen bg-black overflow-hidden"/>
+        	 className="w-full h-screen bg-black overflow-hidden"/>
     </>
   )
 }
