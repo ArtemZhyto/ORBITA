@@ -9,7 +9,7 @@ export const jsonLd = {
   'url': siteConfig.metadataBase.toString(),
 	'logo': {
 		'@type': 'ImageObject',
-		'url': `${siteConfig.metadataBase.origin}/images/web-app-manifest-512x512.png`,
+		'url': `${siteConfig.metadataBase.origin}/icon-512.png`,
 		'width': '512',
 		'height': '512'
 	},
