@@ -17,10 +17,14 @@ export const createSun = () => {
   sunLight.shadow.bias = -0.0005
   sunLight.shadow.radius = 10
 
-  const d = 20
+  const d = 30
   const shadowCam = sunLight.shadow.camera as THREE.OrthographicCamera
-  shadowCam.left = -d; shadowCam.right = d; shadowCam.top = d; shadowCam.bottom = -d
-  shadowCam.near = 0.1; shadowCam.far = 10000
+  shadowCam.left = -d
+	shadowCam.right = d
+	shadowCam.top = d
+	shadowCam.bottom = -d
+  shadowCam.near = 0.1
+	shadowCam.far = 10000
 
   const glareGroup = new THREE.Group()
   sunMesh.add(glareGroup)

@@ -1,5 +1,6 @@
 //@ Modules
 import * as THREE from "three"
+import { getGPUTier } from "detect-gpu"
 
 type Tier = "low" | "medium" | "high"
 
@@ -32,9 +33,10 @@ export const startProgressiveLoading = async (
   onProgress: (percent: number) => void,
   onFirstTierLoaded: () => void
 ) => {
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+	const gpuInfo = await getGPUTier()
+  const isWeakDevice = gpuInfo.tier < 2 || gpuInfo.isMobile
 
-  const trackedTextures = textureRegistry.filter(reg => reg.manifest.low)
+	const trackedTextures = textureRegistry.filter(reg => reg.manifest.low)
   let loadedCount = 0
 
   for (const reg of trackedTextures) {
@@ -60,7 +62,7 @@ export const startProgressiveLoading = async (
     }
   }
 
-  if (!isMobile) {
+  if (!isWeakDevice) {
     setTimeout(async () => {
       for (const reg of textureRegistry) {
         if (reg.manifest.high) {

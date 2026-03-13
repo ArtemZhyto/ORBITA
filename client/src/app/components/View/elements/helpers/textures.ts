@@ -26,11 +26,13 @@ export const nightTex = loadTexture({
 })
 
 export const normalTex = loadTexture({
+  low: "/images/textures/Low/1k_earth_normal_map.webp",
   medium: "/images/textures/Medium/2k_earth_normal_map.webp",
   high: "/images/textures/High/8k_earth_normal_map.webp"
 })
 
 export const specTex = loadTexture({
+  low: "/images/textures/Low/1k_earth_specular_map.webp",
   medium: "/images/textures/Medium/2k_earth_specular_map.webp",
   high: "/images/textures/High/8k_earth_specular_map.webp"
 })
