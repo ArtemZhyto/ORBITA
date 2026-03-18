@@ -6,12 +6,10 @@ import "./layout.scss"
 
 //@ Modules
 import type { Metadata } from "next"
-import Script from "next/script"
 import { Afacad } from 'next/font/google'
 
 //@ Metadata
 import { siteConfig } from "@config/metadata"
-import { jsonLd } from "@config/schema"
 
 export const metadata: Metadata = siteConfig
 
@@ -25,11 +23,9 @@ const afacad = Afacad({
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<html lang="en" className={afacad.className}>
+		<html lang="en"
+					className={afacad.className}>
 			<body>
-				<Script type="application/ld+json"
-				        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}/>
-
 				{children}
 			</body>
 		</html>

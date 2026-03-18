@@ -37,8 +37,6 @@ export const animateScene = (params: {
     earthPivot.rotation.y += speeds.earthOrbit
     earthMesh.rotation.y += speeds.earthRotation
     cloudsMesh.rotation.y += speeds.cloudsRotation
-    cloudsMesh.rotation.z += speeds.cloudsRotation
-    cloudsMesh.rotation.x -= speeds.cloudsRotation
     moonPivot.rotation.y += speeds.moonOrbit
     moonMesh.rotation.y += speeds.moonRotation
 

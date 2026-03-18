@@ -28,6 +28,16 @@ const LoadingScreen = forwardRef<HTMLDivElement, Props>(({ percentRef }, ref) =>
           animation: dotBounce 1.4s infinite ease-in-out;
         }
 
+				.loading-text {
+					text-align: center;
+				}
+
+				@media screen and (max-width: 500px) {
+					.dots {
+						display: none;
+					}
+				}
+
         .dot-1 { animation-delay: 0s; }
         .dot-2 { animation-delay: 0.2s; }
         .dot-3 { animation-delay: 0.4s; }
@@ -41,9 +51,9 @@ const LoadingScreen = forwardRef<HTMLDivElement, Props>(({ percentRef }, ref) =>
              className="w-64 h-64 object-contain logo-img"/>
 
         <div className="-mt-7 flex flex-col items-center relative z-10">
-          <h1 className="text-white mb-2 text-3xl tracking-[6px] flex items-baseline uppercase font-extralight opacity-80">
+          <h1 className="text-white mb-2 text-3xl tracking-[6px] flex items-baseline uppercase font-extralight opacity-80 loading-text">
             LOADING THE UNIVERSE
-            <span className="flex ml-1">
+            <span className="flex ml-1 dots">
               <span className="dot dot-1 mr-[2px]">.</span>
               <span className="dot dot-2 mr-[2px]">.</span>
               <span className="dot dot-3">.</span>

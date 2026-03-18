@@ -4,24 +4,24 @@ import { siteConfig } from "./metadata"
 export const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  'name': 'ORBITA',
-  'description': 'Next-generation orbital radio-coverage analysis. Visualize, interact, and optimize satellite communication patterns with high precision',
-  'url': siteConfig.metadataBase.toString(),
-	'logo': {
+  name: 'ORBITA',
+  description: 'Next-generation orbital radio-coverage analysis. Visualize, interact, and optimize satellite communication patterns with high precision',
+  url: siteConfig.metadataBase.toString(),
+	logo: {
 		'@type': 'ImageObject',
-		'url': `${siteConfig.metadataBase.origin}/icon-512.png`,
-		'width': '512',
-		'height': '512'
+		url: `${siteConfig.metadataBase.origin}/icon-512.png`,
+		width: 512,
+		height: 512
 	},
-	'applicationCategory': 'BusinessApplication',
-  'operatingSystem': 'Windows, macOS, Android, iOS',
-  'author': {
+	applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Windows, macOS, Android, iOS',
+  author: {
     '@type': 'Person',
-    'name': siteConfig.twitter.creator
+    name: siteConfig.twitter.creator
   },
-  'inLanguage': 'en-US',
-  'address': {
+  inLanguage: 'en-US',
+  address: {
     '@type': 'PostalAddress',
-    'addressCountry': 'UA',
+    addressCountry: 'UA',
   }
 }
