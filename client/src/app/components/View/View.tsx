@@ -1,5 +1,8 @@
 'use client'
 
+//@ Styles
+import './View.scss'
+
 //@ Modules
 import { useEffect, useRef, useState } from "react"
 
@@ -80,7 +83,7 @@ const View = () => {
       {!isReady && <LoadingScreen ref={loaderRef}
 																	percentRef={percentRef}/>}
       <div ref={containerRef}
-        	 className="w-full h-screen bg-black overflow-hidden"/>
+        	 className="View bg-black"/>
     </>
   )
 }
