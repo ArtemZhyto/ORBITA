@@ -58,15 +58,15 @@ import "./Control.scss"
 
 const Control = () => {
 	return (
-		<div className="Control flex justify-center w-[350px] h-screen bg-green-800">
-			<div className="my-[15px] flex flex-col">
-				<p className="text-[28px] mb-[5px]">Section1</p>
-				<div className="flex flex-col ml-[20px] text-[22px]">
-					<button className="w-[100px] bg-red-600">setting1</button>
-					<button className="w-[100px] bg-red-600">setting2</button>
-					<button className="w-[100px] bg-red-600">setting3</button>
-					<button className="w-[100px] bg-red-600">setting4</button>
-					<button className="w-[100px] bg-red-600">setting5</button>
+		<div className="Control flex justify-center w-[350px] h-screen bg-[#101117]">
+			<div className="my-[20px] mx-[15px] flex flex-col">
+				<p className="text-[24px] mb-[15px]">Constellation configuration</p>
+				<div className="w-full flex flex-col items-center text-[22px] gap-[20px]">
+					<button className="max-w-[150px] w-full bg-[--block] rounded-[12.5px] px-[35px]">setting1</button>
+					<button className="max-w-[150px] w-full bg-[--block] rounded-[12.5px] px-[35px]">setting2</button>
+					<button className="max-w-[150px] w-full bg-[--block] rounded-[12.5px] px-[35px]">setting3</button>
+					<button className="max-w-[150px] w-full bg-[--block] rounded-[12.5px] px-[35px]">setting4</button>
+					<button className="max-w-[150px] w-full bg-[--block] rounded-[12.5px] px-[35px]">setting5</button>
 				</div>
 			</div>
 		</div>

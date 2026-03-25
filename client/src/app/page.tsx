@@ -9,7 +9,7 @@ import Control from "@app-components/Controls/Control"
 
 const Home = () => {
 	return (
-		<div className="Home">
+		<div className="Home flex justify-center items-center w-full h-full">
 			<View/>
 			<Control/>
 		</div>

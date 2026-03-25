@@ -103,6 +103,7 @@ export const Scene = async (
     renderer.dispose()
     earthMaterial.dispose()
     cloudsMaterial.dispose()
+		container.removeChild(stats.dom)
 
     if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement)
   }

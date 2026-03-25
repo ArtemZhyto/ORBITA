@@ -61,7 +61,12 @@ export const animateScene = (params: {
 
     controls.update()
     composer.render()
-		stats.end()
+
+		try {
+			stats.end()
+		} catch (err) {
+			// ignore
+		}
   }
 
   animate()

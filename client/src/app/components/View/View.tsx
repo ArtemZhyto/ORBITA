@@ -83,7 +83,7 @@ const View = () => {
       {!isReady && <LoadingScreen ref={loaderRef}
 																	percentRef={percentRef}/>}
       <div ref={containerRef}
-        	 className="View bg-black"/>
+        	 className="View bg-black w-full h-screen overflow-hidden"/>
     </>
   )
 }
