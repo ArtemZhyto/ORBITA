@@ -1,17 +1,12 @@
 'use client'
 
-//@ Styles
-import "./Home.scss"
-
 //@ Components
 import View from "@app-components/View/View"
-import Control from "@app-components/Controls/Control"
 
 const Home = () => {
 	return (
-		<div className="Home flex justify-center items-center w-full h-full">
+		<div className="w-full h-full">
 			<View/>
-			<Control/>
 		</div>
 	)
 }

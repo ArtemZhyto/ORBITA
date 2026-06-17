@@ -1,8 +1,5 @@
 'use client'
 
-//@ Styles
-import './View.scss'
-
 //@ Modules
 import { useEffect, useRef, useState } from "react"
 
