@@ -1,6 +1,6 @@
 //@ Modules
 import * as THREE from "three"
-import { Lensflare, LensflareElement } from "three/examples/jsm/objects/Lensflare"
+import { Lensflare, LensflareElement } from "three/examples/jsm/Addons.js"
 
 export const setupLensflare = (sunLight: THREE.DirectionalLight, coreTex: THREE.Texture, ghostTex: THREE.Texture) => {
   const lensflare = new Lensflare()

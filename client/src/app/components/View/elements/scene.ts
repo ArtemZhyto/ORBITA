@@ -1,9 +1,9 @@
 //@ Modules
 import * as THREE from "three"
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer"
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass"
-import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass"
-import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass"
+import { EffectComposer } from "three/examples/jsm/Addons.js"
+import { RenderPass } from "three/examples/jsm/Addons.js"
+import { UnrealBloomPass } from "three/examples/jsm/Addons.js"
+import { OutputPass } from "three/examples/jsm/Addons.js"
 import Stats from "stats.js"
 
 //@ Helpers
