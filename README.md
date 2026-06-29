@@ -1,54 +1,48 @@
-# ORBITA (Orbital Radio-coverage Behavior & Interaction Analysis) 🛰️
+# ORBITA
 
-> **Status:** Active Development / Architectural Modeling Phase
-> **Tech Stack:** Next.js, TypeScript, Three.js (WebGL), GLSL
+> **Status:** Pet Project / Learning Three.js & WebGL
+> 
+> **Tech Stack:** Next.js, TypeScript, Three.js, GLSL
 
 <div align="center">
-  <img src="./preview.png" alt="ORBITA Engine Preview" width="100%">
+  <img src="./preview.png" alt="ORBITA Preview" width="100%">
 </div>
 
-ORBITA is an analytical system designed for modeling satellite constellation behaviors and visualizing radio-coverage interaction. The project bridges the gap between complex orbital mechanics and high-performance web-based simulation.
+ORBITA is a personal project created to practice modern 3D graphics on the web using Three.js. The project focuses on rendering the Earth in real time while experimenting with shaders, lighting, camera movement, and post-processing techniques.
 
-## Project Essence 🎯
+## About the Project
 
-The core of ORBITA is a simulation environment where users can configure satellite constellations and analyze their dynamics. The system provides:
+The application renders an interactive 3D Earth scene with realistic lighting and atmospheric effects. The main goal is to explore how WebGL and Three.js can be used to build visually rich, high-performance browser experiences.
 
-* **Dynamic Modeling:** Real-time simulation based on user-defined satellite parameters.
-* **Visual Analysis:** High-fidelity 3D representation of orbital paths and coverage footprints.
-* **Data Export:** Generation and export of precise coordinate datasets in **JSON** and **CSV** formats for mission-planning integration.
+Current functionality includes:
 
-## Technical Excellence & Implementation 🛠️
+* Interactive 3D Earth visualization
+* Real-time day/night transition
+* Atmospheric glow and cloud rendering
+* Camera controls with smooth movement
 
-Beyond standard 3D rendering, ORBITA implements advanced engineering solutions directly in the graphics pipeline:
+## What I Practiced
 
-* **Custom Shader Engineering:** Leverages `onBeforeCompile` to inject custom GLSL code into Three.js materials. This enables real-time dynamic day/night transitions by calculating the **dot product** between world normals and the sun's position vector.
-* **Atmospheric Scattering Emulation:** A multi-layered sphere architecture using specialized blending modes (`AdditiveBlending`) and back-face rendering to simulate planetary ozone and atmospheric glow.
-* **Precision Camera Tracking:** Implements a delta-tracking algorithm (`delta.subVectors`) for the camera system, ensuring fluid motion and preventing jitter during large-scale coordinate transformations.
-* **Vector-Based Lighting:** Dynamic light direction updates for shaders, ensuring consistent shadowing across the Earth, Moon, and cloud layers.
+While building ORBITA, I experimented with several rendering techniques:
 
-## Mathematical Foundation 🧮
+* Custom shader modifications using `onBeforeCompile`
+* Dynamic day / night lighting based on the sun direction
+* Atmospheric glow using layered spheres with additive blending
+* Camera smoothing to reduce visible jitter
+* Dynamic lighting updates for the Earth, Moon, and cloud layers
+* Post-processing with `EffectComposer` and `UnrealBloomPass`
+* Performance optimization to maintain stable frame rates
 
-The project is built on rigorous mathematical reasoning:
-* **Multivariable Calculus:** Applied for system modeling and calculating interaction points in 3D space.
-* **Spherical Trigonometry:** Used for precise mapping of coverage area on the planetary surface.
-* **Vector Analysis:** Powering the core engine for predictable and accurate satellite positioning and light-source calculations.
+## Technologies
 
-## Key Features ⚙️
+* Next.js
+* TypeScript
+* Three.js
+* GLSL
+* EffectComposer
+* UnrealBloomPass
+* Stats.js
 
-* **Interactive Control Panel:** Real-time configuration of constellation density and orbital parameters.
-* **Analytical Data Engine:** Automated calculation of coordinates and orbital trajectories.
-* **Post-Processing Pipeline:** Integrated `EffectComposer` with `UnrealBloomPass` and specialized lens flare systems to simulate high-dynamic-range (HDR) solar radiation.
-* **Performance-First Rendering:** Optimized visualization logic designed for 60 FPS under varying constellation loads, monitored via real-time telemetry (Stats.js).
+## Purpose
 
-## Development Philosophy 💡
-
-Like all my projects, ORBITA follows strict engineering principles:
-* **Clarity:** Explicit data contracts for orbital parameters.
-* **Determinism:** Consistent simulation results across different hardware.
-* **Maintainability:** A modular, typed codebase (TypeScript) allowing for future expansion into more complex physics models.
-
----
-
-*This project is part of a long-term direction toward aerospace-related technology and advanced engineering systems.*
-
-[![Support Development](https://img.shields.io/badge/🚀_Support_Development-Monobank-%2300B2FF?style=for-the-badge&logo=monobank)](https://send.monobank.ua/jar/8HQAch1y6E)
+ORBITA is primarily a learning project where I explore real-time rendering, shader programming, and 3D graphics with Three.js. It serves as a sandbox for experimenting with different rendering techniques and improving my understanding of WebGL and graphics programming.
